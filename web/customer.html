@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Tạo đơn hàng · Eureka</title>
+  <link rel="stylesheet" href="/static/app.css" />
+  <link rel="stylesheet" href="/static/dashboard.css?v=1" />
+</head>
+<body class="dashboard customer-body research-customer">
+  <header class="topbar"><a href="/control" class="brand"><span class="brand-mark">e.</span><span>Eureka<small>ĐIỀU PHỐI GIAO HÀNG</small></span></a><div class="top-actions"><a class="button quiet" href="/control">← Về bảng điều phối</a></div></header>
+  <main class="order-inject-shell">
+    <header class="inject-head">
+      <div>
+        <span class="eyebrow">NHẬP ĐƠN PHÁT SINH TRONG CA</span>
+        <h1>Tạo đơn mới cho hệ thống</h1>
+        <p>Chọn điểm lấy/giao và nhập thông tin kiện hàng. Thuật toán đang chọn sẽ xét đơn khi xe sẵn sàng nhận chặng tiếp theo.</p>
+        <p id="orderBudget">Mỗi ca tối đa 100 đơn, gồm cả đơn đang chờ phát sinh.</p>
+      </div>
+      <div class="clockbox"><span class="live-dot"></span><div class="clock" data-clock>08:00</div></div>
+    </header>
+
+    <div id="msg" aria-live="polite"></div>
+    <div class="inject-grid">
+      <section class="panel"><div id="customerMap" class="mobile-map inject-map"></div></section>
+      <form id="orderForm" class="panel inject-form">
+        <div class="panel-head"><div><h3>Thông tin đơn hàng</h3><div class="muted small">Địa điểm mẫu giúp bạn thử nhanh mà không cần nhập địa chỉ.</div></div></div>
+        <div class="panel-body">
+          <label class="label" for="flowType">Bạn cần vận chuyển như thế nào?</label>
+          <select id="flowType" class="input">
+            <option value="OUTBOUND">Lấy hàng tại khách, mang về kho</option>
+            <option value="INBOUND">Lấy hàng từ kho, giao cho khách</option>
+            <option value="PICKUP_DELIVERY">Lấy và giao trực tiếp giữa hai điểm</option>
+          </select>
+
+          <div id="pickupGroup">
+            <div class="place-role"><span class="role-dot pick"></span>Điểm lấy hàng</div>
+            <div class="quick-places" id="pickupSamples"></div>
+            <input id="pickupSample" type="hidden" />
+            <input id="pickupAddress" class="input" placeholder="Hoặc nhập địa chỉ lấy hàng…" />
+          </div>
+          <div id="deliveryGroup">
+            <div class="place-role"><span class="role-dot drop"></span>Điểm giao hàng</div>
+            <div class="quick-places" id="deliverySamples"></div>
+            <input id="deliverySample" type="hidden" />
+            <input id="deliveryAddress" class="input" placeholder="Hoặc nhập địa chỉ giao hàng…" />
+          </div>
+
+          <div class="form-grid three">
+            <div><label class="label">Khối lượng (kg)</label><input id="weight" class="input" type="number" min="1" max="6000" value="80" /></div>
+            <div><label class="label">Thời hạn cửa sổ (phút)</label><input id="windowMinutes" class="input" type="number" min="30" max="480" value="180" /></div>
+            <div><label class="label">Mức ưu tiên</label><input id="priority" class="input" type="number" min="0" max="5" step="0.5" value="2" /></div>
+          </div>
+          <label class="label">Ghi chú</label>
+          <textarea id="note" class="textarea" placeholder="Ví dụ: lấy hàng gấp, lưu ý khi phục vụ…"></textarea>
+          <button class="button primary full" id="submitOrder" type="submit">＋ Tạo đơn hàng</button>
+          <div class="muted small" style="margin-top:10px">Nếu ca đang tạm dừng, trở về bảng điều phối và bấm Tiếp tục sau khi tạo đơn.</div>
+        </div>
+      </form>
+    </div>
+
+    <section class="panel"><div class="panel-head"><h3>Các đơn phát sinh hiện tại</h3></div><div class="panel-body"><div id="myOrders" class="order-list research-order-list"></div></div></section>
+  </main>
+  <script src="/static/maplite.js"></script><script src="/static/common.js"></script><script src="/static/customer.js"></script>
+</body>
+</html>

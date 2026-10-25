@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Eureka · Trung tâm điều phối DFPDP</title>
+  <meta name="theme-color" content="#0b1220" />
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body class="ops-body guide-open">
+  <div class="guide-overlay" id="guideOverlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
+    <div class="guide-card ops-guide-card">
+      <div class="guide-hero ops-guide-hero">
+        <div class="ops-mark">E</div>
+        <div>
+          <span class="eyebrow">HƯỚNG DẪN VẬN HÀNH BẢN MẪU</span>
+          <h2 id="guideTitle">Trung tâm điều phối giao – lấy hàng động</h2>
+          <p>Bản V7 mô phỏng đầy đủ ba luồng nghiệp vụ và tải vận hành xuyên suốt ngày: <b>Flow 1: Kho → Lấy → Kho; Flow 2: Kho → Giao → Kho; Flow 3: Kho → Lấy → Giao → Kho</b>. Nhiều xe đã có kế hoạch khu vực đầu ca và chạy đồng thời; MCDSM + PESDVS chỉ can thiệp vào <b>quyết định kế tiếp</b> khi trạng thái thay đổi.</p>
+        </div>
+      </div>
+      <div class="guide-grid ops-guide-grid">
+        <section class="guide-section"><span class="guide-step">01</span><div><h3>Bắt đầu ca</h3><p>Bấm <b>Bắt đầu mô phỏng</b>. V1–V4 rời kho lúc 08:00; các xe còn lại có giờ xuất phát trễ được sinh theo mã ngẫu nhiên. Bạn không cần bấm quyết định cho từng xe để chúng rời kho.</p></div></section>
+        <section class="guide-section"><span class="guide-step">02</span><div><h3>Chọn xe để phân tích</h3><p>Chọn V1–V6 ở khung <b>Phân tích tuyến khu vực</b> hoặc bấm trực tiếp biểu tượng xe trên bản đồ. Hệ thống sẽ vẽ toàn bộ phần tuyến còn lại của xe và đánh số các điểm dừng.</p></div></section>
+        <section class="guide-section"><span class="guide-step">03</span><div><h3>Theo dõi ba luồng</h3><p>Khung <b>Ba luồng nghiệp vụ</b> cho biết số đơn đang hoạt động, đã hoàn tất, đơn tĩnh/động và hàng đang ở trên xe cho từng flow. Trên trục tuyến, mỗi stop có badge F1/F2/F3 để biết order thuộc lifecycle nào.</p></div></section>
+        <section class="guide-section"><span class="guide-step">04</span><div><h3>Quan sát xe đi theo đường thật</h3><p>Bản mẫu gọi trực tiếp hai máy chủ OSRM từ trình duyệt và có thêm máy chủ cục bộ dự phòng. Khi kết nối thành công, biểu tượng xe di chuyển dọc theo hình học đường OpenStreetMap, không đi đường chim bay.</p></div></section>
+        <section class="guide-section"><span class="guide-step">05</span><div><h3>Đơn động tự phát sinh</h3><p>Mặc định hệ thống tự sinh hàng chục đơn động từ khoảng 08:45 đến 19:30, đủ cả F1/F2/F3 và phân tán theo 6 khu vực. Model chỉ nhìn thấy order đúng thời điểm <b>ĐƠN MỚI</b>. Bạn vẫn có thể tạo thêm order thủ công bất kỳ lúc nào.</p></div></section>
+        <section class="guide-section"><span class="guide-step">06</span><div><h3>Đọc phân tích order mới</h3><p>Khung <b>Cơ hội lấy hàng gần tuyến</b> phân tích F1/F3: khoảng cách, tải sau pickup, độ đi vòng theo đường bộ và time window. Flow 2 động sẽ bắt đầu bằng tác vụ chất hàng tại kho trước khi giao.</p></div></section>
+        <section class="guide-section"><span class="guide-step">07</span><div><h3>Biểu đồ vận hành</h3><p>Biểu đồ dòng thời gian có một hàng cho mỗi xe: thời điểm xuất kho, các chặng đã hoàn tất và chặng đang chạy. Đây là nơi nhìn nhanh mức độ hoạt động song song của toàn đội xe.</p></div></section>
+        <section class="guide-section"><span class="guide-step">08</span><div><h3>Thử giao thông / sự cố</h3><p>Thay hệ số giao thông hoặc cho xe hỏng/phục hồi. Sự kiện được đưa vào trạng thái; nếu đạt điều kiện trigger, bộ máy ra quyết định có thể đưa ra khuyến nghị mới cho phần tuyến còn lại.</p></div></section>
+        <section class="guide-section"><span class="guide-step">09</span><div><h3>Đọc khuyến nghị mô hình</h3><p>Khung quyết định ghi rõ xe được MCDSM chọn, đơn được PESDVS chọn, tác vụ, xác suất, ETA và độ trễ. Nếu xe đang chạy, khuyến nghị được áp dụng ở ranh giới tiếp theo thay vì ngắt chặng.</p></div></section>
+        <section class="guide-section"><span class="guide-step">10</span><div><h3>Nếu chưa bám đường</h3><p>Bấm <b>Kiểm tra định tuyến</b>. Hệ thống thử OSRM chính, OSRM OpenStreetMap Đức và máy chủ cục bộ. Nếu cả ba thất bại mới hiện “đường nối dự phòng”; khi đó kiểm tra Internet/tường lửa/VPN.</p></div></section>
+      </div>
+      <div class="guide-footer">
+        <div class="guide-tip"><b>Kịch bản trình diễn nên dùng:</b> chọn V1 – Nam TP.HCM → bắt đầu mô phỏng → xem F2 giao hàng đầu ca → chờ đơn F1/F3 tự động xuất hiện gần tuyến → quan sát mô hình chen pickup/giao trực tiếp → mở bảng ba flow để theo dõi backlog và throughput → nếu muốn, tạo thêm một đơn thủ công để kiểm thử tức thời.</div>
+        <button class="btn btn-primary guide-enter" id="btnEnterGuide">Vào trung tâm điều phối</button>
+      </div>
+    </div>
+  </div>
+
+  <header class="ops-topbar">
+    <div class="ops-brand">
+      <div class="ops-mark">E</div>
+      <div>
+        <div class="ops-kicker">EUREKA · VẬN HÀNH DFPDP</div>
+        <h1>Trung tâm điều phối giao – lấy hàng động</h1>
+        <small>3 luồng nghiệp vụ · Đơn tĩnh + đơn động tự động · Tuyến còn lại cập nhật trực tuyến · MCDSM + PESDVS</small>
+      </div>
+    </div>
+    <div class="ops-toolbar">
+      <button class="btn btn-primary" id="btnStart">Bắt đầu mô phỏng</button>
+      <button class="btn btn-secondary" id="btnPause">Tạm dừng</button>
+      <label class="ops-speed">Tốc độ
+        <select id="speedSelect">
+          <option value="1">1 giây = 1 phút</option>
+          <option value="2" selected>1 giây = 2 phút</option>
+          <option value="5">1 giây = 5 phút</option>
+          <option value="10">1 giây = 10 phút</option>
+        </select>
+      </label>
+      <a class="btn btn-secondary" href="/customer" target="_blank">Tạo đơn phát sinh</a>
+      <button class="btn btn-secondary auto-demand-btn" id="btnAutoDynamic">Đơn động tự động: BẬT</button>
+      <button class="btn btn-secondary" id="btnNewScenario">Tạo ca mới</button>
+      <button class="btn btn-ghost" id="btnGuide">Hướng dẫn</button>
+      <div class="ops-clock"><span class="live-dot"></span><div><b data-clock>08:00</b><small data-speed>—</small></div></div>
+    </div>
+  </header>
+
+  <main class="ops-shell">
+    <section class="ops-status-strip">
+      <div class="ops-status-card"><span>Xe đang trên đường</span><b id="kEnRoute">0</b><small id="kDeparted">0 xe đã xuất kho</small></div>
+      <div class="ops-status-card"><span>Đơn đang hoạt động</span><b id="kActive">0</b><small id="kOnboard">0 đơn có hàng trên xe</small></div>
+      <div class="ops-status-card"><span>Hoàn tất</span><b id="kCompleted">0</b><small id="kLate">0 đơn trễ</small></div>
+      <div class="ops-status-card"><span>Tái xét / quyết định</span><b id="kReplans">0</b><small id="kDecisions">0 quyết định</small></div>
+      <div class="ops-status-card"><span>Hoạt động đội xe</span><b id="kActivity">0%</b><small id="kDemandMix">0 tĩnh · 0 động</small></div>
+      <div class="ops-status-card"><span>Giao thông</span><b id="kTraffic">1.00×</b><small id="routingMini">Đang kiểm tra định tuyến</small></div>
+      <div class="ops-status-card model-card"><span>Mô hình</span><b id="modelCheckpoint">—</b><small id="modelState">—</small></div>
+    </section>
+
+    <section class="panel flow-monitor-panel">
+      <div class="ops-panel-head">
+        <div><span class="eyebrow">BA LUỒNG NGHIỆP VỤ TRONG CÙNG MỘT CA</span><h2>Giám sát lifecycle đơn hàng</h2><p>Một xe có thể xen kẽ F1, F2 và F3 trên cùng tuyến. Số liệu dưới đây lấy trực tiếp từ state hiện tại, không phải số minh họa cố định.</p></div>
+        <div class="auto-demand-summary"><span class="live-dot"></span><div><b id="autoDemandState">Đơn động tự động đang bật</b><small id="autoDemandNext">Lần phát sinh kế tiếp —</small></div></div>
+      </div>
+      <div class="flow-monitor-grid">
+        <article class="flow-monitor-card flow-one">
+          <div class="flow-card-head"><span class="flow-code">F1</span><div><b>Lấy hàng về kho</b><small>KHO → LẤY → KHO</small></div></div>
+          <div class="flow-path"><i>KHO</i><span>→</span><i class="pick">LẤY</i><span>→</span><i>KHO</i></div>
+          <div class="flow-stat-grid"><div><span>Đang hoạt động</span><b id="f1Active">0</b></div><div><span>Hoàn tất</span><b id="f1Done">0</b></div><div><span>Tĩnh / Động</span><b id="f1Mix">0 / 0</b></div><div><span>Hàng trên xe</span><b id="f1Onboard">0</b></div></div>
+        </article>
+        <article class="flow-monitor-card flow-two">
+          <div class="flow-card-head"><span class="flow-code">F2</span><div><b>Giao hàng từ kho</b><small>KHO → GIAO → KHO</small></div></div>
+          <div class="flow-path"><i>KHO</i><span>→</span><i class="drop">GIAO</i><span>→</span><i>KHO</i></div>
+          <div class="flow-stat-grid"><div><span>Đang hoạt động</span><b id="f2Active">0</b></div><div><span>Hoàn tất</span><b id="f2Done">0</b></div><div><span>Tĩnh / Động</span><b id="f2Mix">0 / 0</b></div><div><span>Hàng trên xe</span><b id="f2Onboard">0</b></div></div>
+        </article>
+        <article class="flow-monitor-card flow-three">
+          <div class="flow-card-head"><span class="flow-code">F3</span><div><b>Lấy & giao trực tiếp</b><small>KHO → LẤY → GIAO → KHO</small></div></div>
+          <div class="flow-path"><i>KHO</i><span>→</span><i class="pick">LẤY</i><span>→</span><i class="drop">GIAO</i><span>→</span><i>KHO</i></div>
+          <div class="flow-stat-grid"><div><span>Đang hoạt động</span><b id="f3Active">0</b></div><div><span>Hoàn tất</span><b id="f3Done">0</b></div><div><span>Tĩnh / Động</span><b id="f3Mix">0 / 0</b></div><div><span>Hàng trên xe</span><b id="f3Onboard">0</b></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="ops-primary-grid">
+      <div class="panel ops-map-panel">
+        <div class="ops-panel-head">
+          <div><span class="eyebrow">BẢN ĐỒ VẬN HÀNH</span><h2>Đội xe và tuyến đường thực tế</h2><p>Tuyến đậm: chặng đang chạy · Tuyến màu theo xe: phần tuyến còn lại · Điểm dừng được đánh số theo thứ tự hiện tại.</p></div>
+          <div class="ops-map-actions">
+            <span class="route-health" id="routingStatus">Đang kiểm tra tuyến…</span>
+            <button class="btn btn-secondary btn-small" id="btnRoutingTest">Kiểm tra định tuyến</button>
+          </div>
+        </div>
+        <div id="controlMap" class="control-map ops-map" aria-label="Bản đồ điều phối"></div>
+        <div class="ops-map-legend">
+          <span><i class="legend-dot depot"></i>Kho</span>
+          <span><i class="legend-dot pick"></i>Lấy hàng</span>
+          <span><i class="legend-dot drop"></i>Giao hàng</span>
+          <span><i class="legend-line active"></i>Chặng đang chạy</span>
+          <span><i class="legend-line plan"></i>Tuyến còn lại của xe đang chọn</span>
+          <span><i class="legend-line model"></i>Điểm mô hình đề xuất</span>
+        </div>
+      </div>
+
+      <aside class="ops-analysis-stack">
+        <section class="panel route-analysis-panel">
+          <div class="ops-panel-head compact">
+            <div><span class="eyebrow">PHÂN TÍCH TUYẾN THEO KHU VỰC</span><h3>Tuyến còn lại theo xe</h3></div>
+            <select id="vehicleSelect" class="vehicle-select"></select>
+          </div>
+          <div class="route-summary" id="routeSummary"></div>
+          <div class="route-rail" id="routeRail"><div class="empty">Đang tải tuyến.</div></div>
+        </section>
+
+        <section class="panel pickup-analysis-panel">
+          <div class="ops-panel-head compact"><div><span class="eyebrow">CƠ HỘI F1 / F3 GẦN TUYẾN</span><h3>Phân tích điểm phát sinh</h3></div><span class="mini-badge" id="pickupCount">0 điểm</span></div>
+          <div id="pickupAnalysis" class="pickup-analysis"><div class="empty">Chưa có điểm lấy hàng khả dụng.</div></div>
+        </section>
+
+        <section class="panel model-decision-panel">
+          <div class="ops-panel-head compact"><div><span class="eyebrow">BỘ MÁY RA QUYẾT ĐỊNH</span><h3>Khuyến nghị trực tuyến</h3></div><button class="btn btn-secondary btn-small" id="btnReplan">Tính quyết định mới</button></div>
+          <div id="decisions" class="decision-stack"><div class="empty">Chưa có khuyến nghị đang chờ.</div></div>
+        </section>
+      </aside>
+    </section>
+
+    <section class="panel ops-timeline-panel">
+      <div class="ops-panel-head">
+        <div><span class="eyebrow">BIỂU ĐỒ VẬN HÀNH ĐỘI XE</span><h2>Dòng thời gian đa xe</h2><p>Mỗi hàng là một xe. Mốc tam giác là giờ xuất kho; thanh màu là chặng đã chạy/đang chạy. Đường dọc thể hiện thời gian mô phỏng hiện tại.</p></div>
+        <div class="timeline-legend"><span><i class="tl-box complete"></i>Đã hoàn tất</span><span><i class="tl-box running"></i>Đang chạy</span><span><i class="tl-box future"></i>Chưa xuất phát</span></div>
+      </div>
+      <div class="timeline-wrap"><canvas id="opsTimeline" height="260"></canvas></div>
+    </section>
+
+    <section class="ops-secondary-grid">
+      <section class="panel">
+        <div class="ops-panel-head compact"><div><span class="eyebrow">ĐỘI XE</span><h3>Tải trọng và tình trạng vận hành</h3></div><span class="mini-badge" id="scenarioSeed">Mã ngẫu nhiên —</span></div>
+        <div class="ops-vehicle-list" id="vehicleList"></div>
+      </section>
+      <section class="panel">
+        <div class="ops-panel-head compact"><div><span class="eyebrow">DANH SÁCH ĐƠN</span><h3>Đơn tĩnh, đơn động tự động/thủ công và trạng thái</h3></div></div>
+        <div class="table-wrap ops-order-table-wrap"><table class="ops-table"><thead><tr><th>Đơn</th><th>Luồng</th><th>Tác vụ kế tiếp</th><th>Xe / hàng</th><th>Cửa sổ thời gian</th><th>Khối lượng</th><th>Nguồn</th></tr></thead><tbody id="ordersBody"></tbody></table></div>
+      </section>
+    </section>
+
+    <section class="ops-bottom-grid">
+      <section class="panel">
+        <div class="ops-panel-head compact"><div><span class="eyebrow">SỰ KIỆN THỬ NGHIỆM</span><h3>Giao thông và sự cố</h3></div></div>
+        <div class="ops-event-controls">
+          <button class="btn btn-secondary" data-traffic="1.00">Giao thông bình thường 1.00×</button>
+          <button class="btn btn-secondary" data-traffic="1.30">Đông xe 1.30×</button>
+          <button class="btn btn-secondary" data-traffic="1.50">Ùn tắc 1.50×</button>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="ops-panel-head compact"><div><span class="eyebrow">NHẬT KÝ</span><h3>Sự kiện và quyết định</h3></div></div>
+        <div id="events" class="ops-log"><div class="empty">Chưa có sự kiện.</div></div>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/maplite.js"></script>
+  <script src="/static/common.js"></script>
+  <script src="/static/control.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eureka · Báo cáo điều hành V9.2</title>
+<link rel="stylesheet" href="/static/app.css">
+<link rel="stylesheet" href="/static/report.css?v=9.2">
+</head>
+<body class="report-body">
+<header class="report-topbar">
+  <div class="report-brand"><span class="report-logo">E</span><div><b>Eureka Operations Report</b><small>DFPDP · Traffic intelligence · Multi-day observability</small></div></div>
+  <div class="report-actions"><a class="button quiet" href="/control">← Quay lại mô phỏng</a><button class="button quiet" id="jsonButton">↓ Snapshot JSON</button><button class="button primary" id="printButton">🖨 In / Lưu PDF</button></div>
+</header>
+
+<main class="report-shell">
+  <section class="report-hero card">
+    <div>
+      <span class="eyebrow">BÁO CÁO TỔNG HỢP</span>
+      <h1 id="reportTitle">Tổng quan vận hành mô phỏng</h1>
+      <p id="reportSubtitle">Đang tải dữ liệu từ mô phỏng…</p>
+    </div>
+    <div class="hero-badges"><span id="heroStatus" class="status-chip">—</span><span id="heroClock" class="status-chip muted">—</span></div>
+  </section>
+
+  <section class="report-kpis" id="kpiGrid"></section>
+
+  <section class="report-grid">
+    <article class="card panel panel-wide">
+      <div class="panel-title"><div><span class="eyebrow">STATUS MIX</span><h2>Cơ cấu trạng thái đơn hàng</h2><p>Tỷ trọng hoàn tất, trễ, đang hoạt động, bị hủy và chưa phát sinh.</p></div></div>
+      <div class="status-layout">
+        <svg id="statusDonut" class="status-donut" viewBox="0 0 280 220"></svg>
+        <div id="statusLegend" class="status-legend"></div>
+      </div>
+    </article>
+
+    <article class="card panel">
+      <div class="panel-title"><div><span class="eyebrow">INSIGHTS</span><h2>Nhận định tự động</h2><p>Tóm tắt điểm mạnh, điểm nghẽn và khuyến nghị.</p></div></div>
+      <div id="insightCards" class="insight-cards"></div>
+    </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="card panel panel-wide">
+      <div class="panel-title"><div><span class="eyebrow">FLOW ANALYSIS</span><h2>Phân tích theo 3 flow vận hành</h2><p>So sánh khối lượng công việc giữa F1, F2 và F3.</p></div></div>
+      <svg id="flowChart" class="report-chart" viewBox="0 0 760 290"></svg>
+    </article>
+    <article class="card panel">
+      <div class="panel-title"><div><span class="eyebrow">VEHICLE UTILIZATION</span><h2>Khai thác đội xe</h2><p>Xếp hạng theo quãng đường và số tác vụ.</p></div></div>
+      <svg id="vehicleChart" class="report-chart tall" viewBox="0 0 420 290"></svg>
+    </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="card panel panel-wide">
+      <div class="panel-title"><div><span class="eyebrow">DAILY CONTINUITY</span><h2>Diễn biến theo ngày</h2><p>Số đơn hoàn tất lũy kế, trễ lũy kế và carry-over qua từng ngày.</p></div></div>
+      <svg id="dailyChart" class="report-chart" viewBox="0 0 760 290"></svg>
+    </article>
+    <article class="card panel">
+      <div class="panel-title"><div><span class="eyebrow">LIVE TELEMETRY</span><h2>Xu hướng hệ thống</h2><p>Từ cửa sổ telemetry gần nhất của mô phỏng.</p></div></div>
+      <svg id="telemetryMiniChart" class="report-chart tall" viewBox="0 0 420 290"></svg>
+    </article>
+  </section>
+
+  <section class="report-grid">
+    <article class="card panel panel-wide">
+      <div class="panel-title"><div><span class="eyebrow">BẢNG TỔNG HỢP</span><h2>Tổng hợp theo ngày</h2></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Ngày</th><th>Hoàn tất lũy kế</th><th>Trễ lũy kế</th><th>Carry-over</th><th>Quãng đường tích lũy</th></tr></thead><tbody id="dailyTable"></tbody></table></div>
+    </article>
+    <article class="card panel">
+      <div class="panel-title"><div><span class="eyebrow">ĐƠN CẦN CHÚ Ý</span><h2>Top đơn trễ / còn tồn</h2></div></div>
+      <div class="table-wrap small"><table><thead><tr><th>Đơn</th><th>Flow</th><th>Trạng thái</th><th>Trễ</th></tr></thead><tbody id="orderAttentionTable"></tbody></table></div>
+    </article>
+  </section>
+</main>
+<script src="/static/common.js?v=9.2"></script>
+<script src="/static/report.js?v=9.2"></script>
+</body></html>

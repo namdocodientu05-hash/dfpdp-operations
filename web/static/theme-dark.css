@@ -1,0 +1,404 @@
+/* Eureka V9.2 · Giao diện tối kiểu "control center": nền navy, thẻ kính mờ, điểm nhấn xanh lá phát sáng.
+   Chỉ đổi lớp trình bày; cấu trúc HTML/ID giữ nguyên. Nạp sau app.css và dashboard.css. */
+.ops8-body{
+  --bg:#060c18;--panel:rgba(13,23,42,.78);--panel-solid:#0d172a;--panel-2:rgba(255,255,255,.035);
+  --line:rgba(120,150,200,.16);--line-strong:rgba(120,150,200,.28);
+  --ink:#e6edf7;--muted:#8a9ab3;--faint:#5d6d87;
+  --accent:#34d399;--accent-2:#22c55e;--accent-glow:rgba(52,211,153,.35);--cyan:#38bdf8;
+  --shadow:0 18px 50px rgba(0,0,0,.45);
+  color:var(--ink);
+  background:radial-gradient(1200px 600px at 75% -10%,rgba(56,189,248,.10),transparent 60%),radial-gradient(900px 500px at 0% 100%,rgba(52,211,153,.07),transparent 60%),var(--bg);
+  background-attachment:fixed;color-scheme:dark;
+}
+.ops8-body ::selection{background:rgba(52,211,153,.3)}
+.ops8-body *::-webkit-scrollbar{width:8px;height:8px}
+.ops8-body *::-webkit-scrollbar-thumb{background:rgba(148,163,184,.22);border-radius:99px}
+.ops8-body *::-webkit-scrollbar-track{background:transparent}
+
+/* Ẩn các dòng chú thích kỹ thuật thừa */
+.ops8-body #algorithmHint,.ops8-body #scenarioLabel,.ops8-body #modelNotice,.ops8-body .page-footer{display:none!important}
+
+/* Thẻ & thanh trên cùng */
+.ops8-body .card{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.ops8-topbar{background:rgba(6,12,24,.78);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+.ops8-brand b{color:#fff}
+.ops8-brand small{color:var(--faint)}
+.ops8-logo{background:linear-gradient(145deg,#34d399,#0ea5e9);color:#04121f;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 8px 24px rgba(52,211,153,.35)}
+.conn{color:var(--muted)}
+.conn.online{color:var(--accent)}
+.ops8-body .eyebrow{color:var(--accent);letter-spacing:.14em}
+
+/* Nút */
+.ops8-body .button{min-height:36px;padding:0 14px;font-size:12px;font-weight:600;text-decoration:none;background:var(--panel-2);border:1px solid var(--line-strong);color:var(--ink);border-radius:10px;transition:background .15s,border-color .15s,box-shadow .15s}
+.ops8-body .button:hover{background:rgba(255,255,255,.07);border-color:rgba(148,180,230,.4)}
+.ops8-body .button.primary{background:linear-gradient(180deg,#34d399,#16a34a);border-color:transparent;color:#03140c;font-weight:700;box-shadow:0 6px 20px rgba(34,197,94,.3),inset 0 1px 0 rgba(255,255,255,.35)}
+.ops8-body .button.primary:hover{background:linear-gradient(180deg,#4ade80,#22c55e);box-shadow:0 8px 26px rgba(34,197,94,.45),inset 0 1px 0 rgba(255,255,255,.35)}
+.ops8-body .button.small{min-height:32px;padding:0 11px;font-size:11px}
+.playback select{height:36px;font-size:12px}
+.ops8-body .button:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.ops8-sidebar .button.full:hover{background:linear-gradient(180deg,#4ade80,#22c55e)}
+
+/* Cột thiết lập */
+.setup-head{border-color:var(--line)}
+.setup-head h2,.setup-group h3{color:#fff}
+.setup-head p{color:var(--muted)}
+.setup-group{border-color:var(--line)}
+.ops8-sidebar .field{color:var(--muted)}
+.ops8-sidebar select,.ops8-sidebar input[type=number]{background-color:rgba(255,255,255,.04);border-color:var(--line-strong);color:var(--ink)}
+.ops8-sidebar select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238a9ab3' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")}
+.ops8-sidebar select:hover,.ops8-sidebar input[type=number]:hover{border-color:rgba(148,180,230,.45)}
+.ops8-sidebar select:focus,.ops8-sidebar input[type=number]:focus{border-color:var(--accent);background-color:rgba(52,211,153,.06);box-shadow:0 0 0 3px rgba(52,211,153,.18)}
+.ops8-body option{background:#0d172a;color:var(--ink)}
+.unit-input i{color:var(--faint)}
+.field-row output{color:var(--accent)}
+.ops8-sidebar input[type=range]{background:linear-gradient(90deg,#34d399 var(--pct,40%),rgba(148,163,184,.2) var(--pct,40%))}
+.ops8-sidebar input[type=range]::-webkit-slider-thumb{background:#0d172a;border-color:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.18),0 0 12px rgba(52,211,153,.6)}
+.ops8-sidebar input[type=range]::-moz-range-thumb{background:#0d172a;border-color:#34d399}
+.ops8-sidebar .field-hint{color:var(--faint)}
+.ops8-sidebar .advanced summary{color:var(--muted)}
+
+/* Tiêu đề trang & đồng hồ */
+.ops8-hero h1{color:#fff;font-weight:700}
+.hero-clock{background:linear-gradient(160deg,rgba(52,211,153,.14),rgba(56,189,248,.06));border:1px solid rgba(52,211,153,.3);box-shadow:0 0 30px rgba(52,211,153,.12),inset 0 1px 0 rgba(255,255,255,.06)}
+.hero-clock small{color:var(--accent)}
+.hero-clock strong{color:#fff;text-shadow:0 0 18px rgba(52,211,153,.45)}
+.hero-clock em{color:var(--muted)}
+
+/* KPI */
+.ops8-kpis article{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.ops8-kpis article::after{content:"";position:absolute;inset:auto 0 0 0;height:2px;background:linear-gradient(90deg,transparent,rgba(52,211,153,.6),transparent);opacity:.5}
+.ops8-kpis span{color:var(--muted);font-size:9px;font-weight:600}
+.ops8-kpis strong{color:#fff;font-weight:700}
+.ops8-kpis small{color:var(--faint)}
+.mini-progress{background:rgba(148,163,184,.15)}
+.mini-progress i{background:linear-gradient(90deg,#34d399,#38bdf8);box-shadow:0 0 10px rgba(52,211,153,.6)}
+
+/* Thanh chạy mô phỏng */
+.run-state b{color:#fff}
+.run-state p{color:var(--muted)}
+.state-dot.running{background:#34d399;box-shadow:0 0 0 5px rgba(52,211,153,.14),0 0 14px rgba(52,211,153,.8)}
+.playback label{color:var(--muted)}
+.playback select{background:rgba(255,255,255,.04);border-color:var(--line-strong);color:var(--ink)}
+
+/* Khung bản đồ */
+.panel-title{border-color:var(--line)}
+.panel-title h2{color:#fff}
+.panel-title p{color:var(--muted)}
+.map-actions label{color:var(--muted)}
+.ops8-body input[type=checkbox]{accent-color:#34d399}
+.map-overlay-legend{border-color:var(--line);color:var(--muted)}
+.legend-tip{color:var(--faint)}
+.map-stage .ops8-map{background:#0b1424}
+.ml-map[data-theme=dark]{background:#0b1424}
+.ml-map[data-theme=dark] .ml-tiles{filter:sepia(1) hue-rotate(178deg) saturate(2.4) brightness(.6) contrast(1.15)}
+.ml-map[data-theme=light]{background:#f2f3f5}
+.ops8-body .ml-controls{box-shadow:0 8px 24px rgba(0,0,0,.4);border:1px solid var(--line-strong);border-radius:12px}
+.ops8-body .ml-controls button{background:rgba(13,23,42,.88);color:var(--ink);font-weight:500;backdrop-filter:blur(10px)}
+.ops8-body .ml-controls button:hover{background:rgba(30,45,75,.95)}
+.ops8-body .ml-controls button+button{border-top:1px solid var(--line)}
+.ops8-body .ml-attrib{background:rgba(6,12,24,.7);color:var(--faint)}
+.ops8-body .ml-attrib a{color:var(--muted)}
+.ml-map[data-theme=dark] .grid-cell-label{background:rgba(13,23,42,.75);border-color:var(--line)}
+.ml-map[data-theme=dark] .grid-cell-label b{color:#cbd5e1}
+.ml-map[data-theme=dark] .grid-cell-label span{color:var(--faint)}
+.ml-map[data-theme=dark] .warehouse.art b{background:#0d172a;color:#fca5a5;box-shadow:0 0 0 1px rgba(252,165,165,.3),0 4px 12px rgba(0,0,0,.4)}
+.ml-map[data-theme=dark] .map-veh small{box-shadow:0 0 0 1px rgba(255,255,255,.18),0 0 12px rgba(0,0,0,.5)}
+
+/* Thanh công cụ dọc ở góc trái bản đồ */
+.map-dock{left:14px;top:14px;bottom:auto;transform:none;flex-direction:column;gap:2px;padding:6px;max-width:none;max-height:calc(100% - 28px);overflow-y:auto;overflow-x:hidden;background:rgba(9,17,32,.82);border:1px solid var(--line-strong);border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.dock-btn{flex-direction:column;justify-content:center;gap:4px;width:76px;min-height:64px;padding:8px 4px;text-align:center;color:var(--muted);border-radius:12px;position:relative}
+.dock-btn span{align-items:center}
+.dock-btn b{font-size:9.5px;font-weight:600;color:inherit;white-space:normal;line-height:1.2}
+.dock-btn small{font-size:8px;color:var(--faint);white-space:normal;line-height:1.2}
+.dock-btn svg{width:20px;height:20px}
+.dock-btn:hover{background:rgba(255,255,255,.06);color:#fff}
+.dock-btn.active{background:linear-gradient(180deg,rgba(52,211,153,.2),rgba(52,211,153,.08));color:#fff;box-shadow:inset 0 0 0 1px rgba(52,211,153,.45),0 0 18px rgba(52,211,153,.18)}
+.dock-btn.active::before{content:"";position:absolute;left:-6px;top:14px;bottom:14px;width:3px;border-radius:3px;background:#34d399;box-shadow:0 0 10px #34d399}
+.dock-btn.active svg{color:#34d399;filter:drop-shadow(0 0 6px rgba(52,211,153,.7))}
+.dock-btn.active small{color:#6ee7b7}
+
+/* Ngăn thông số mở cạnh thanh công cụ */
+.info-drawer{left:104px;right:auto;top:14px;width:min(540px,calc(100% - 118px));max-height:calc(100% - 28px);background:rgba(10,18,34,.94);border:1px solid var(--line-strong);border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.55);color:var(--ink);backdrop-filter:blur(18px);animation-name:drawerInLeft}
+.info-drawer.wide{width:min(920px,calc(100% - 118px))}
+@keyframes drawerInLeft{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:none}}
+.drawer-close{background:rgba(255,255,255,.05);border-color:var(--line-strong);color:var(--muted);box-shadow:none}
+.drawer-close:hover{background:rgba(255,255,255,.1);color:#fff}
+
+/* Nội dung trong các ngăn */
+.drawer-pane .subhead b,.drawer-pane h3{color:#e6edf7}
+.drawer-pane .subhead span,.drawer-pane small,.drawer-pane p{color:var(--muted)}
+.ai-live{background:rgba(148,163,184,.14);color:var(--muted)}
+.ai-live.live{background:rgba(52,211,153,.15);color:#6ee7b7;box-shadow:0 0 12px rgba(52,211,153,.25)}
+.pipe-step,.traffic-card,.fleet-item,.day-card,.telemetry-stat,.decision-metrics>div,.decision-insights>div,.current-stop,.vehicle-facts>div,.state-inspector,.ai-landscape-card,.ai-mini-panel,.ai-gauge-card{background:rgba(255,255,255,.03);border-color:var(--line);color:var(--ink)}
+.pipe-step .idx{background:rgba(255,255,255,.06);color:var(--muted)}
+.pipe-step.active,.traffic-card.active,.day-card.current{border-color:rgba(52,211,153,.5);background:rgba(52,211,153,.07)}
+.pipe-step span,.pipe-step.active span{color:#34d399}
+.traffic-card.active:before{background:#34d399;box-shadow:0 0 10px #34d399}
+.ai-choice{background:linear-gradient(135deg,rgba(52,211,153,.12),rgba(56,189,248,.06));border-color:rgba(52,211,153,.3)}
+.ai-choice .pair i{color:#34d399}
+.ai-candidates,.traffic-controls{border-color:var(--line);background:transparent}
+.candidate-row{border-color:var(--line)}
+.prob-track,.loadbar{background:rgba(148,163,184,.15)}
+.prob-track i{background:#38bdf8}
+.candidate-row.selected .prob-track i{background:#34d399;box-shadow:0 0 8px rgba(52,211,153,.6)}
+.vector-tabs button{background:rgba(255,255,255,.04);border-color:var(--line);color:var(--muted)}
+.vector-tabs button.active{background:#34d399;color:#03140c;border-color:transparent}
+.state-vector span{background:rgba(255,255,255,.05);color:var(--ink)}
+.fleet-item.selected{border-color:rgba(52,211,153,.6);box-shadow:0 0 0 2px rgba(52,211,153,.15)}
+.fleet-text b{color:#fff}
+.fleet-status.moving{color:#34d399}
+.carryover-chips span{background:rgba(251,146,60,.1);color:#fdba74;border-color:rgba(251,146,60,.3)}
+.hour-bar{opacity:.85}
+.hour-bar.active{outline-color:#fff}
+.timeline-now i{background:#fff}
+.timeline-now span{background:#34d399;color:#03140c}
+.traffic-live b{color:#fff}
+.traffic-controls span{color:var(--ink)}
+.traffic-controls select,.table-tools input,.table-tools select{background:rgba(255,255,255,.04);border-color:var(--line-strong);color:var(--ink)}
+.telemetry-chart{background:rgba(255,255,255,.02);border-color:var(--line)}
+.telemetry-stat b{color:#fff}
+.detail-head{border-color:var(--line)}
+.ops8-body .tab{color:var(--muted);font-size:12px;font-weight:600;padding:8px 12px;border-radius:9px}
+.ops8-body .tab.active{background:rgba(52,211,153,.15);color:#6ee7b7;box-shadow:inset 0 0 0 1px rgba(52,211,153,.4)}
+.order-table-wrap th{background:#0f1b31;color:var(--muted);border-color:var(--line)}
+.order-table-wrap td{border-color:var(--line);color:var(--ink)}
+.order-table-wrap tr:hover td{background:rgba(255,255,255,.025)}
+.status-pill{background:rgba(148,163,184,.14);color:#cbd5e1}
+.status-pill.done{background:rgba(52,211,153,.15);color:#6ee7b7}
+.status-pill.onboard{background:rgba(56,189,248,.15);color:#7dd3fc}
+.status-pill.late{background:rgba(248,113,113,.15);color:#fca5a5}
+.event-row{border-color:var(--line)}
+.vehicle-facts b,.current-stop b{color:#fff}
+/* Biểu đồ SVG vẽ bằng màu cứng → đổi sang tông tối */
+.drawer-pane svg [fill="#fff"],.drawer-pane svg [fill="#ffffff"],.drawer-pane svg [fill="#fbfdff"],.drawer-pane svg [fill="#f8fafc"]{fill:rgba(255,255,255,.03)}
+.drawer-pane svg [fill="#0f172a"],.drawer-pane .cand-val,.drawer-pane .gauge-number{fill:#e6edf7}
+.drawer-pane .cand-rank{fill:#cbd5e1}
+.drawer-pane .axis-text,.drawer-pane .cand-label,.drawer-pane .cand-sub,.drawer-pane .gauge-label{fill:var(--muted)}
+.drawer-pane svg [stroke="#f1f5f9"],.drawer-pane svg [stroke="#e2e8f0"]{stroke:rgba(148,163,184,.16)}
+.drawer-pane svg [stroke="#fff"]{stroke:#0d172a}
+.drawer-pane svg [fill="#cbd5e1"]{fill:#3b5275}
+.drawer-pane stop[stop-color="#eff6ff"],.drawer-pane stop[stop-color="#f8fafc"]{stop-color:#14223b}
+.decision-metrics span{background:none;border:0;padding:0;color:var(--muted)}
+.decision-metrics b{color:#fff}
+
+/* Hộp thoại */
+.ops8-body dialog{background:rgba(10,18,34,.97);color:var(--ink);border:1px solid var(--line-strong);box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.ops8-body dialog::backdrop{background:rgba(3,7,15,.65);backdrop-filter:blur(4px)}
+.ops8-body dialog h2{color:#fff}
+.ops8-body dialog p{color:var(--muted)}
+.help-dialog{width:min(860px,92vw);padding:26px 26px 22px;border-radius:20px}
+.help-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.help-head .eyebrow{font-size:10px}
+.help-head h2{font-size:22px;font-weight:700;margin:6px 0 0;letter-spacing:-.01em}
+.icon-close{flex:0 0 auto;width:36px;height:36px;border-radius:10px;border:1px solid var(--line-strong);background:rgba(255,255,255,.04);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}
+.icon-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.icon-close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.help-card{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line);transition:border-color .15s,background .15s}
+.help-card:hover{border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.04)}
+.help-ico{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(160deg,rgba(52,211,153,.22),rgba(56,189,248,.1));box-shadow:inset 0 0 0 1px rgba(52,211,153,.35),0 0 16px rgba(52,211,153,.15);color:#34d399}
+.help-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.help-card h3{font-size:13px;font-weight:700;color:#fff;margin:2px 0 4px}
+.help-card p{font-size:11.5px;line-height:1.55;margin:0;color:var(--muted)}
+.help-card p b{color:#e6edf7;font-weight:600}
+.toast{background:#0d172a;border:1px solid var(--line-strong);color:var(--ink)}
+
+/* ================= Hiệu năng chuyển động =================
+   Bản đồ thay đổi mỗi khung hình, nên mọi lớp nằm đè lên nó không dùng kính mờ (backdrop-filter
+   buộc trình duyệt làm mờ lại vùng phía sau ở từng khung hình). Xe được tách lớp để di chuyển bằng GPU. */
+.ops8-body .map-card,.map-dock,.info-drawer,.ops8-body .ml-controls button{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.ops8-body .map-card{background:rgba(11,20,36,.97)}
+.map-dock{background:rgba(9,17,32,.95)}
+.info-drawer{background:rgba(10,18,34,.98)}
+.ml-marker[data-id^="v-"]{will-change:transform,opacity;transition:opacity .45s ease}
+/* Xe đang trong kho: ẩn (mờ dần), chỉ còn thấy hình kho */
+.ml-marker.in-depot{opacity:0;pointer-events:none}
+.ml-marker[data-id="depot"]{z-index:2}
+.map-veh .veh-body{transition:none;will-change:transform}
+.ml-tiles{transform:translateZ(0)}
+
+/* ================= Ngăn thông số: cỡ chữ dễ đọc cho người điều phối ================= */
+.info-drawer{width:min(620px,calc(100% - 118px));font-size:13px}
+.info-drawer.wide{width:min(1040px,calc(100% - 118px))}
+.drawer-pane .panel-title{padding:16px 56px 14px 18px}
+.drawer-pane .panel-title h2{font-size:17px;font-weight:700}
+.drawer-pane .panel-title p{font-size:12px;line-height:1.5}
+.drawer-pane .eyebrow{font-size:10px}
+.drawer-pane .subhead b{font-size:13px}
+.drawer-pane .subhead span{font-size:11px}
+.dim{color:var(--faint)}
+/* Chip lọc dùng chung */
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line-strong);background:rgba(255,255,255,.03);color:var(--muted);font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.chip b{font-size:11px;font-weight:700;min-width:22px;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.07);color:var(--ink);text-align:center;font-variant-numeric:tabular-nums}
+.chip:hover{color:#fff;border-color:rgba(148,180,230,.45)}
+.chip.active{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.55);color:#fff}
+.chip.active b{background:#34d399;color:#03140c}
+.chip.late b{background:rgba(248,113,113,.18);color:#fca5a5}
+.veh-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:12px;font-weight:600;color:#fff;white-space:nowrap;vertical-align:middle}
+.veh-chip i{width:9px;height:9px;border-radius:50%;box-shadow:0 0 8px currentColor}
+
+/* Tab chi tiết */
+.detail-head{padding:12px 56px 12px 14px}
+.ops8-body .tab{font-size:13px;padding:9px 14px}
+.detail-actions .button{font-size:12px}
+.tab-pane{padding:14px 16px 18px}
+
+/* Bảng đơn hàng */
+#ordersTab .filter-chips{margin-bottom:12px}
+.table-tools{gap:10px;margin-bottom:12px}
+.table-tools input{height:40px;font-size:13px;padding:0 14px;border-radius:10px}
+#orderFilter{display:none}
+.table-tools span{font-size:12px;color:var(--muted);white-space:nowrap}
+.order-table-wrap{border:1px solid var(--line);border-radius:12px}
+.order-table-wrap table{min-width:820px}
+.order-table-wrap th{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:11px 12px}
+.order-table-wrap td{font-size:13px;padding:12px;vertical-align:middle}
+.order-table-wrap td b{font-size:13px;font-weight:700;color:#fff}
+.order-table-wrap td small{font-size:11.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.order-table-wrap tbody tr{cursor:pointer;transition:background .12s}
+.order-table-wrap tbody tr.is-selected td{background:rgba(52,211,153,.07)}
+.order-table-wrap tbody tr.is-selected td:first-child{box-shadow:inset 3px 0 0 #34d399}
+.parcel-cell{gap:10px}
+.parcel-cell .parcel-art{width:30px;height:30px;flex:0 0 auto}
+.origin.dyn{color:#fbbf24!important}
+.flow-tag{display:inline-block;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:6px;margin-right:6px;vertical-align:1px}
+.flow-tag.f1{background:rgba(251,191,36,.15);color:#fcd34d}
+.flow-tag.f2{background:rgba(56,189,248,.15);color:#7dd3fc}
+.flow-tag.f3{background:rgba(167,139,250,.18);color:#c4b5fd}
+.flow-name{font-size:13px}
+.ops8-body .status-pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.ops8-body .status-pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor}
+.status-pill.pickup{background:rgba(251,191,36,.13);color:#fcd34d}
+.status-pill.delivery{background:rgba(56,189,248,.13);color:#7dd3fc}
+.status-pill.depot{background:rgba(167,139,250,.14);color:#c4b5fd}
+.status-pill.onboard{background:rgba(96,165,250,.15);color:#93c5fd}
+.status-pill.done{background:rgba(52,211,153,.14);color:#6ee7b7}
+.status-pill.muted{background:rgba(148,163,184,.12);color:#94a3b8}
+.late-note{display:block;color:#fca5a5!important;font-weight:600}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td.due b{font-variant-numeric:tabular-nums}
+td.due.soon b{color:#fcd34d}td.due.soon small{color:#fbbf24!important}
+td.due.late b{color:#fca5a5}td.due.late small{color:#f87171!important}
+
+/* Nhật ký & sự kiện */
+.event-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.event-row{display:grid;grid-template-columns:62px 92px minmax(0,1fr);gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line)}
+.event-row time{display:flex;flex-direction:column;line-height:1.2}
+.event-row time b{font-size:13px;color:#fff;font-variant-numeric:tabular-nums}
+.event-row time small{font-size:10.5px;color:var(--faint)}
+.event-row .event-tag{justify-self:start;font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;background:rgba(148,163,184,.12);color:#cbd5e1;white-space:nowrap}
+.event-row .event-text{font-size:13px;line-height:1.55;color:var(--ink)}
+.event-row .veh-chip{font-size:12px;margin-right:2px}
+.event-row.ev-decision .event-tag{background:rgba(56,189,248,.14);color:#7dd3fc}
+.event-row.ev-move .event-tag{background:rgba(167,139,250,.15);color:#c4b5fd}
+.event-row.ev-done .event-tag{background:rgba(52,211,153,.14);color:#6ee7b7}
+.event-row.ev-order .event-tag{background:rgba(251,191,36,.14);color:#fcd34d}
+.event-row.ev-traffic .event-tag{background:rgba(251,146,60,.15);color:#fdba74}
+.event-row.ev-alert .event-tag{background:rgba(248,113,113,.15);color:#fca5a5}
+.event-row:hover{background:rgba(255,255,255,.02)}
+
+/* Chuyển ngày */
+.day-timeline{display:flex;gap:10px;padding:16px 18px;overflow-x:auto}
+.day-card{flex:1 0 150px;min-width:150px;padding:14px;border-radius:14px}
+.day-card.done{background:rgba(255,255,255,.02);opacity:.85}
+.day-top{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.day-card b{font-size:14px;color:#fff}
+.day-card small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.day-top small{display:inline;margin:0}
+.day-top em{margin-left:auto;font-style:normal;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(52,211,153,.16);color:#6ee7b7}
+.day-top em.ok{background:rgba(148,163,184,.14);color:#cbd5e1}
+.day-card strong{display:block;font-size:30px;font-weight:700;color:#fff;margin:10px 0 2px;font-variant-numeric:tabular-nums}
+.day-card.current strong{color:#6ee7b7;text-shadow:0 0 16px rgba(52,211,153,.4)}
+.carryover-list{padding:0 18px 18px}
+.carry-title{font-size:13px!important;color:var(--muted)!important;margin:0 0 10px!important}
+.carry-title b{font-size:15px;color:#fdba74}
+.carryover-chips{gap:6px}
+.carryover-chips button,.carryover-chips span{font:inherit;font-size:12px;font-weight:600;padding:5px 10px;border-radius:8px;background:rgba(251,146,60,.1);color:#fdba74;border:1px solid rgba(251,146,60,.3);cursor:pointer}
+.carryover-chips button:hover{background:rgba(251,146,60,.2);color:#fff}
+
+/* Đội xe */
+.fleet-list{gap:10px;padding:14px 16px}
+.fleet-item{grid-template-columns:52px 1fr auto;gap:10px;padding:12px;border-radius:12px}
+.fleet-item .truck-art{width:50px;height:26px}
+.fleet-text b{font-size:14px}
+.fleet-text span{font-size:12px;margin-top:3px;color:var(--muted)}
+.fleet-model{font-size:11px;color:var(--muted)}
+.fleet-status{font-size:11px;font-weight:700}
+.loadbar{height:5px;margin-top:6px}
+.drawer-pane .panel-title select{height:36px;font-size:12px;border-radius:9px;padding:0 10px;background:rgba(255,255,255,.04);border:1px solid var(--line-strong);color:var(--ink)}
+
+/* Xe đang chọn */
+.vehicle-detail-head{gap:14px}
+.vehicle-detail-head .truck-art{width:72px;height:36px}
+.vehicle-detail-head h3{font-size:18px;color:#fff}
+.vehicle-detail-head p{font-size:12.5px}
+.vehicle-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.vehicle-facts>div{padding:12px;border-radius:12px;border:1px solid var(--line)}
+.vehicle-facts span{font-size:11.5px;color:var(--muted)}
+.vehicle-facts b{font-size:17px;margin-top:4px;display:block}
+.current-stop{padding:12px 14px;border-radius:12px;margin-top:12px}
+.current-stop b{font-size:14px}
+.current-stop p{font-size:12.5px;margin-top:4px}
+.history-list{margin-top:14px}
+.history-list>b{font-size:13px;color:#fff}
+.history-list p{font-size:12.5px;padding:7px 0;border-bottom:1px solid var(--line);margin:0}
+
+/* AI / traffic / biểu đồ */
+.ai-pipeline{padding:14px 18px;gap:7px}
+.pipe-step{grid-template-columns:28px 1fr 20px;padding:10px 12px;border-radius:11px}
+.pipe-step .idx{width:28px;height:28px;font-size:11px}
+.pipe-step b{font-size:12.5px}
+.ai-choice{margin:0 18px 14px;padding:14px 16px}
+.ai-choice .pair{font-size:22px}
+.ai-choice small{font-size:12px}
+.ai-visual-grid{padding:0 18px 14px}
+.ai-landscape-card,.ai-mini-panel{padding:14px}
+.gauge-foot{font-size:11.5px;margin-top:4px}
+.decision-metrics{gap:8px}
+.decision-metrics>div{padding:10px 12px}
+.decision-metrics span{font-size:11.5px}
+.decision-metrics b{font-size:14px}
+.decision-insights b{font-size:13px}
+.decision-insights span{font-size:12px}
+.ai-candidates{padding:14px 18px}
+.candidate-row{grid-template-columns:110px 1fr 60px;padding:9px 0}
+.candidate-row b,.candidate-row>strong{font-size:12.5px}
+.candidate-row small{font-size:11px}
+.prob-track{height:8px}
+.state-inspector{margin:0 18px 18px;padding:12px}
+.state-inspector summary{font-size:12.5px}
+.state-inspector #stateShape{font-size:11.5px}
+.vector-tabs button{font-size:11px;padding:6px 10px}
+.state-vector span{font-size:11px;padding:5px 7px}
+.traffic-live span,.traffic-live small{font-size:11px}
+.traffic-live b{font-size:26px}
+.traffic-region-cards{padding:14px 18px 0}
+.traffic-card{padding:12px 14px}
+.traffic-card b{font-size:13px}
+.traffic-card strong{font-size:22px}
+.traffic-card small{font-size:11.5px}
+.traffic-timeline{padding:12px 18px 6px}
+.timeline-axis{height:120px}
+.hour-bar span{font-size:10px;bottom:-18px}
+.timeline-now span{font-size:10px;padding:3px 6px}
+.traffic-controls{padding:14px 18px;gap:10px;flex-wrap:wrap}
+.traffic-controls span{font-size:12.5px}
+.traffic-controls select{height:36px;font-size:12px;border-radius:9px}
+.traffic-controls small{font-size:11.5px;color:var(--muted)}
+.telemetry-legend{font-size:11.5px;gap:14px}
+.telemetry-layout{padding:14px 18px 18px;gap:14px}
+.telemetry-stat{padding:14px;border-radius:12px}
+.telemetry-stat span{font-size:11.5px}
+.telemetry-stat b{font-size:22px}
+.telemetry-stat small{font-size:11.5px}
+.telemetry-axis-note{font-size:11.5px}
+.drawer-pane .empty-message{font-size:13px;color:var(--muted);padding:24px}
+
+@media(max-width:760px){
+  .map-dock{left:8px;right:8px;top:auto;bottom:8px;flex-direction:row;max-height:none;overflow-x:auto;overflow-y:hidden}
+  .dock-btn{width:auto;min-width:52px;min-height:48px}
+  .dock-btn.active::before{display:none}
+  .info-drawer,.info-drawer.wide{left:8px;right:8px;top:8px;width:auto;max-height:calc(100% - 86px)}
+  .help-grid{grid-template-columns:1fr}
+}

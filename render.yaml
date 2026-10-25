@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: dfpdp-operations
+    runtime: python
+    plan: free
+    buildCommand: >-
+      pip install --upgrade pip &&
+      pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu torch==2.10.0 &&
+      pip install --no-cache-dir -r requirements-render.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.5
+      - key: PYTHONUNBUFFERED
+        value: "1"

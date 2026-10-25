@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eureka · Trung tâm điều phối thông minh V9.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/static/app.css?v=9.5.0">
+<link rel="stylesheet" href="/static/dashboard.css?v=9.5.0">
+<link rel="stylesheet" href="/static/theme-dark.css?v=9.5.0">
+</head>
+<body class="ops8-body">
+<header class="ops8-topbar">
+  <a href="/control" class="ops8-brand"><span class="ops8-logo">E</span><span><b>Eureka Logistics Intelligence</b><small>DFPDP · MCDSM · PESDVS · MULTI-DAY DIGITAL TWIN</small></span></a>
+  <div class="ops8-top-status"><span id="connection" class="conn">○ Đang kết nối…</span><button id="helpButton" class="button quiet">Hướng dẫn</button><a class="button quiet" href="/customer" target="_blank" rel="noopener">＋ Tạo đơn thủ công</a></div>
+</header>
+
+<div class="ops8-shell">
+<aside class="ops8-sidebar card">
+  <div class="setup-head"><h2>Thiết lập kịch bản</h2><p>Ca 08:00–22:00 · đơn chưa xong tự chuyển sang ngày sau</p></div>
+  <form id="setupForm" class="setup-form"><fieldset id="setupFields">
+    <section class="setup-group">
+      <h3>Điều phối</h3>
+      <label class="field"><span>Thuật toán</span><select id="algorithm"><option value="drl" selected>AI · DRL PESDVS</option><option value="nearest">Baseline · Điểm gần nhất</option><option value="deadline">Baseline · Hạn giao sớm nhất</option></select></label>
+      <p id="algorithmHint" class="field-hint"></p>
+      <label class="field" id="modelField" hidden><span>Checkpoint</span><select id="model"><option value="pilot">Pilot · current_pilot_best.pt</option><option value="best">Best · best_actor_critic.pt</option></select></label>
+    </section>
+    <section class="setup-group">
+      <h3>Quy mô</h3>
+      <div class="two-fields">
+        <label class="field"><span>Số xe</span><span class="unit-input"><input id="vehicles" type="number" min="1" max="24" value="6"><i>xe</i></span></label>
+        <label class="field"><span>Tổng số đơn</span><span class="unit-input"><input id="orders" type="number" min="1" max="100" value="40"><i>đơn</i></span></label>
+      </div>
+      <label class="field"><span class="field-row">Tỷ lệ đơn động <output id="dynamicValue">40%</output></span><input id="dynamic" type="range" min="0" max="100" step="10" value="40"></label>
+      <p id="demandHint" class="field-hint"></p>
+    </section>
+    <section class="setup-group">
+      <h3>Thời gian &amp; giao thông</h3>
+      <div class="two-fields">
+        <label class="field"><span>Số ngày</span><select id="days"><option value="1">1 ngày</option><option value="2">2 ngày</option><option value="3" selected>3 ngày</option><option value="4">4 ngày</option><option value="5">5 ngày</option><option value="6">6 ngày</option><option value="7">7 ngày</option></select></label>
+        <label class="field"><span>Bắt đầu</span><select id="startWeekday"><option value="0">Thứ 2</option><option value="1">Thứ 3</option><option value="2">Thứ 4</option><option value="3">Thứ 5</option><option value="4">Thứ 6</option><option value="5">Thứ 7</option><option value="6">Chủ nhật</option></select></label>
+      </div>
+      <label class="field"><span>Hồ sơ tốc độ</span><select id="trafficRegion"><option value="HCMC">TP.HCM · theo giờ</option></select></label>
+      <details class="advanced"><summary>Tùy chọn nâng cao</summary><label class="field"><span>Seed tái lập</span><input id="seed" type="number" min="0" max="999999" value="42"></label></details>
+    </section>
+    <button type="submit" class="button primary full" id="applyButton">Tạo mô phỏng mới</button>
+  </fieldset></form>
+</aside>
+
+<main class="ops8-main">
+  <section class="ops8-hero">
+    <div><span class="eyebrow">TRUNG TÂM ĐIỀU PHỐI · DIGITAL TWIN</span><h1>Theo dõi quyết định, traffic và tuyến xe theo thời gian thực mô phỏng.</h1><p id="scenarioLabel">Đang tải kịch bản…</p></div>
+    <div class="hero-clock"><small id="dayLabel">Ngày 1 / 3</small><strong id="clock">08:00</strong><span id="weekday">Thứ 2</span><em id="shiftLabel">Ca 08:00–22:00</em></div>
+  </section>
+
+  <section class="ops8-kpis">
+    <article><span>Hoàn tất</span><strong id="completed">0 / 0</strong><div class="mini-progress"><i id="progressFill"></i></div></article>
+    <article><span>Đơn đang hoạt động</span><strong id="active">0</strong><small id="future">0 chưa phát sinh</small></article>
+    <article><span>Xe đang chạy</span><strong id="busy">0 / 0</strong><small id="distance">0 km</small></article>
+    <article><span>Chuyển ngày</span><strong id="carryover">0</strong><small>đơn chưa hoàn tất</small></article>
+    <article><span>Giao trễ</span><strong id="late">0</strong><small>soft time window</small></article>
+    <article><span>Tốc độ traffic</span><strong id="trafficSpeed">—</strong><small id="trafficRegionLabel">TP.HCM</small></article>
+  </section>
+
+  <section class="ops8-runbar card">
+    <div class="run-state"><span class="state-dot" id="stateDot"></span><div><b id="runTitle">Sẵn sàng</b><p id="runMessage">Đang kết nối…</p></div></div>
+    <div class="playback"><label>Tốc độ mô phỏng<select id="speed"><option value="1">1 phút / giây</option><option value="5" selected>5 phút / giây</option><option value="15">15 phút / giây</option><option value="30">30 phút / giây</option><option value="60">1 giờ / giây</option><option value="120">2 giờ / giây</option><option value="240">4 giờ / giây</option></select></label><button class="button primary" id="playButton">▶ Bắt đầu</button><button class="button quiet" id="pauseButton">Ⅱ Tạm dừng</button></div>
+  </section>
+  <div id="modelNotice" class="notice" hidden></div>
+
+  <section class="map-card card">
+    <div class="panel-title map-title"><div><span class="eyebrow">NETWORK VIEW</span><h2>Bản đồ vận hành</h2><p id="mapHint">Chọn xe để xem chặng đang chạy.</p></div><div class="map-actions"><label><input id="showOrders" type="checkbox" checked> Đơn hàng</label><button id="themeButton" class="button quiet small" type="button" title="Đổi nền bản đồ sáng/tối">☀ Nền sáng</button><button id="fitButton" class="button quiet small">Toàn cảnh</button></div></div>
+    <div class="map-stage">
+      <div id="fleetMap" class="ops8-map"></div>
+
+      <aside class="info-drawer" id="infoDrawer" aria-label="Thông số chi tiết" hidden>
+        <button class="drawer-close" id="drawerClose" type="button" aria-label="Đóng">✕</button>
+
+        <div class="drawer-pane ops8-ai" data-pane="ai" hidden>
+          <div class="panel-title"><div><span class="eyebrow">MODEL OBSERVABILITY</span><h2>Bên trong bộ ra quyết định</h2><p id="aiSubtitle">Đang chờ quyết định đầu tiên.</p></div><span class="ai-live" id="aiLive">IDLE</span></div>
+      <div class="ai-pipeline" id="aiPipeline"></div>
+      <div class="ai-choice" id="aiChoice"></div>
+      <div class="ai-visual-grid">
+        <div class="ai-landscape-card">
+          <div class="subhead"><b>Bản đồ ưu tiên ứng viên</b><span id="confidenceValue">Top 8</span></div>
+          <svg id="decisionLandscape" class="decision-landscape" viewBox="0 0 500 280" aria-label="Bản đồ quyết định"></svg>
+          <div class="gauge-foot" id="gaugeFoot">Biểu đồ thể hiện mức ưu tiên tương đối giữa các ứng viên đang được chấm điểm; không diễn giải như xác suất tuyệt đối nếu đang dùng heuristic.</div>
+        </div>
+        <div class="ai-mini-panel">
+          <div class="subhead"><b>Tóm tắt ra quyết định</b><span id="decisionBadges"></span></div>
+          <div id="decisionMetrics" class="decision-metrics"></div>
+          <div class="subhead top-gap"><b>Nhận định tự động</b><span id="candidateCount"></span></div>
+          <div id="decisionInsights" class="decision-insights"></div>
+          <div class="subhead top-gap"><b>Bảng xếp hạng ứng viên</b><span id="candidateCountSecondary"></span></div>
+          <svg id="candidateChart" class="candidate-chart" viewBox="0 0 360 180" aria-label="Candidate chart"></svg>
+        </div>
+      </div>
+      <div class="ai-candidates"><div class="subhead"><b>Ứng viên đang được chấm điểm</b><span id="candidateCountSecondary"></span></div><div id="candidateRows"></div></div>
+      <details class="state-inspector" open><summary>State tensor của đơn được chọn</summary><div id="stateShape"></div><div class="vector-tabs"><button data-vector="Z" class="active">Z · trạng thái đơn</button><button data-vector="U">U · xe/khối lượng</button><button data-vector="D">D · khoảng cách/thời gian</button></div><div id="stateVector" class="state-vector"></div></details>
+        </div>
+
+        <div class="drawer-pane fleet-panel" data-pane="fleet" hidden><div class="panel-title"><div><span class="eyebrow">FLEET</span><h2>Đội xe</h2></div><select id="fleetFilter"><option value="all">Tất cả</option><option value="moving">Đang chạy</option><option value="idle">Đang rảnh</option></select></div><div id="fleetList" class="fleet-list"></div></div>
+
+        <div class="drawer-pane ops8-traffic" data-pane="traffic" hidden>
+          <div class="panel-title"><div><span class="eyebrow">TRAFFIC INTELLIGENCE</span><h2>Hồ sơ tốc độ theo giờ</h2><p>Hồ sơ tốc độ TP.HCM theo giờ từ dữ liệu tham chiếu của nhóm.</p></div><div class="traffic-live"><span>Tốc độ hiện tại</span><b id="trafficCurrent">—</b><small id="trafficMeta">—</small></div></div>
+          <div class="traffic-region-cards" id="trafficRegionCards"></div>
+          <div class="traffic-timeline"><div class="timeline-axis" id="trafficBars"></div><div class="timeline-now" id="trafficNow"><i></i><span>Hiện tại</span></div></div>
+          <div class="traffic-controls"><span>Hệ số sự cố bổ sung</span><select id="traffic"><option value="1">Không có sự cố ×1.0</option><option value="1.15">Chậm cục bộ ×1.15</option><option value="1.3">Đông xe ×1.30</option><option value="1.5">Ùn tắc ×1.50</option></select><small>Dữ liệu profile là nền; hệ số này mô phỏng sự cố đột xuất.</small></div>
+        </div>
+
+        <div class="drawer-pane day-panel" data-pane="days" hidden><div class="panel-title"><div><span class="eyebrow">MULTI-DAY CONTINUITY</span><h2>Theo dõi chuyển ngày</h2><p>Đơn tồn cuối ngày được giữ nguyên trạng thái và tái điều phối sáng hôm sau.</p></div></div><div id="dayTimeline" class="day-timeline"></div><div id="carryoverList" class="carryover-list"></div></div>
+
+        <div class="drawer-pane telemetry-card" data-pane="telemetry" data-wide hidden>
+    <div class="panel-title"><div><span class="eyebrow">LIVE OPERATIONS TELEMETRY</span><h2>Biểu đồ động của hệ thống</h2><p>Ghi nhận theo thời gian mô phỏng: xe bận, đơn hoạt động, carry-over, quyết định và traffic.</p></div><div class="telemetry-legend"><span><i class="legend-swatch sw-active"></i>Đơn hoạt động</span><span><i class="legend-swatch sw-busy"></i>Xe đang chạy</span><span><i class="legend-swatch sw-carry"></i>Carry-over</span><span><i class="legend-swatch sw-traffic"></i>Traffic</span></div></div>
+    <div class="telemetry-layout">
+      <div class="telemetry-main">
+        <svg id="telemetryChart" class="telemetry-chart" viewBox="0 0 980 280" aria-label="Biểu đồ vận hành"></svg>
+        <div class="telemetry-axis-note">Trục ngang là thời gian mô phỏng liên tục theo nhiều ngày. Các đường thể hiện xu hướng hoạt động của hệ thống.</div>
+      </div>
+      <aside class="telemetry-side">
+        <div class="telemetry-stat"><span>Snapshot hiện tại</span><b id="telemetrySnapshot">—</b><small id="telemetrySnapshotMeta">—</small></div>
+        <div class="telemetry-stat"><span>Tải mô phỏng</span><b id="opsLoad">—</b><small id="opsLoadMeta">—</small></div>
+        <div class="telemetry-stat"><span>Nhịp ra quyết định</span><b id="decisionPulse">—</b><small id="decisionPulseMeta">—</small></div>
+        <div class="telemetry-stat"><span>Điểm nhấn gần nhất</span><b id="telemetryHighlight">—</b><small id="telemetryHighlightMeta">—</small></div>
+      </aside>
+    </div>
+        </div>
+
+        <div class="drawer-pane detail-card" data-pane="details" data-wide hidden>
+    <div class="detail-head"><nav class="tabs"><button class="tab active" data-tab="orders">Đơn hàng</button><button class="tab" data-tab="vehicle">Xe đang chọn</button><button class="tab" data-tab="events">Nhật ký & sự kiện</button></nav><div class="detail-actions"><button class="button quiet small" id="reportButton">▣ Mở báo cáo</button><button class="button quiet small" id="exportButton">↓ Xuất CSV</button></div></div>
+    <div id="ordersTab" class="tab-pane"><div id="orderChips" class="filter-chips"></div><div class="table-tools"><input id="orderSearch" type="search" placeholder="Tìm mã đơn, địa điểm…"><select id="orderFilter"><option value="all">Tất cả</option><option value="active">Chưa hoàn tất</option><option value="completed">Hoàn tất</option><option value="late">Trễ</option><option value="cancelled">Hủy</option></select><span id="orderCount"></span></div><div class="order-table-wrap"><table><thead><tr><th>Đơn</th><th>Flow / hành trình</th><th>Trạng thái</th><th>Xe</th><th>Khối lượng</th><th>Hạn giao</th></tr></thead><tbody id="orderRows"></tbody></table></div></div>
+    <div id="vehicleTab" class="tab-pane" hidden><div id="vehicleDetail"></div></div>
+    <div id="eventsTab" class="tab-pane" hidden><div class="event-controls"><div id="eventChips" class="filter-chips"></div><button id="demandButton" class="button quiet small">Tạm ngưng đơn động</button></div><div id="eventList"></div></div>
+        </div>
+      </aside>
+
+      <nav class="map-dock" id="mapDock" aria-label="Xem thông số">
+        <button type="button" class="dock-btn" data-open="ai"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4M10 10h4v4h-4z"/></svg><span><b>AI quyết định</b><small id="dockAi">IDLE</small></span></button>
+        <button type="button" class="dock-btn" data-open="fleet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 17V9l2-4h10l2 4v8"/><path d="M3 17h18M5 12h14"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/></svg><span><b>Đội xe</b><small id="dockFleet">—</small></span></button>
+        <button type="button" class="dock-btn" data-open="traffic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-6"/><circle cx="12" cy="18" r="1.4"/></svg><span><b>Traffic</b><small id="dockTraffic">—</small></span></button>
+        <button type="button" class="dock-btn" data-open="days"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><b>Chuyển ngày</b><small id="dockDays">—</small></span></button>
+        <button type="button" class="dock-btn" data-open="telemetry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-6 4 3 7-8"/></svg><span><b>Biểu đồ</b><small>Telemetry</small></span></button>
+        <button type="button" class="dock-btn" data-open="details"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg><span><b>Đơn & nhật ký</b><small id="dockOrders">—</small></span></button>
+      </nav>
+    </div>
+    <div class="map-overlay-legend"><span><i class="legend-vehicle"></i>Xe</span><span><i class="legend-pick"></i>Pickup</span><span><i class="legend-drop"></i>Delivery</span><span class="legend-tip">Bấm các nút trên thanh dưới bản đồ để xem thông số kỹ thuật</span></div>
+    <p id="tileNotice" class="tile-notice" hidden>Không tải được tile nền. Dữ liệu xe và lưới phân tích vẫn hoạt động.</p>
+  </section>
+  <footer class="page-footer">Eureka · V9.2 Reporting Intelligence Lab <span>OSM/OSRM · Traffic profile · Multi-day carryover · Decision observability</span></footer>
+</main>
+</div>
+
+<div id="toast" class="toast" role="alert" hidden></div>
+<dialog id="helpDialog" class="ops8-dialog help-dialog" aria-labelledby="helpTitle">
+  <header class="help-head"><div><span class="eyebrow">Hướng dẫn nhanh</span><h2 id="helpTitle">Cách đọc mô phỏng</h2></div><button class="icon-close" id="closeHelp" type="button" aria-label="Đóng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+  <div class="help-grid">
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="18" cy="16" r="3"/></svg></span><div><h3>Tạo kịch bản</h3><p>Chọn thuật toán, số xe, số đơn, số ngày và hồ sơ tốc độ ở cột bên trái rồi bấm <b>Tạo mô phỏng mới</b>.</p></div></article>
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></span><div><h3>Tuyến xe phát sáng</h3><p>Đoạn đường đã chạy sáng theo màu xe (xe tải sáng đậm hơn van), đoạn còn lại là nét đứt, chặng đã xong là vệt chấm.</p></div></article>
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="7" height="16" rx="2"/><path d="M14 8h7M14 12h7M14 16h5"/></svg></span><div><h3>Thanh công cụ</h3><p>Thanh dọc ở góc bản đồ mở các ngăn AI, đội xe, traffic, chuyển ngày, biểu đồ và đơn hàng. Bấm lại hoặc nhấn Esc để đóng.</p></div></article>
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></span><div><h3>Chuyển ngày</h3><p>Ca chạy 08:00–22:00. Hết ca, xe hoàn tất chặng và về kho; đơn chưa xong được tiếp tục từ 08:00 hôm sau.</p></div></article>
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.5-.8z"/></svg></span><div><h3>Bộ ra quyết định</h3><p>Khi chạy DRL, ngăn AI hiện tập đơn khả thi, xác suất Actor, state Z/U/D và đơn được chọn.</p></div></article>
+    <article class="help-card"><span class="help-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><div><h3>Bản đồ</h3><p>Xe luôn đi theo đường bộ thật. Bấm vào xe để xem chặng đang chạy; nút ☀/☾ đổi nền sáng/tối.</p></div></article>
+  </div>
+</dialog>
+<dialog id="replaceDialog"><h2>Tạo mô phỏng mới?</h2><p>Tiến trình hiện tại sẽ bị thay thế. Bạn có thể xuất CSV trước khi tiếp tục.</p><div class="dialog-actions"><button id="cancelReplace" class="button quiet">Giữ mô phỏng</button><button id="confirmReplace" class="button primary">Tạo mới</button></div></dialog>
+<script src="/static/maplite.js?v=9.5.0"></script><script src="/static/common.js?v=9.5.0"></script><script src="/static/dashboard.js?v=9.5.0"></script>
+</body></html>

@@ -1,0 +1,9 @@
+{
+  "name": "HCMC Express - Đặt giao hỏa tốc",
+  "short_name": "HCMC Express",
+  "start_url": "/customer",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#f8fafc",
+  "description": "Giao diện người gửi của mô phỏng điều phối giao hỏa tốc TP.HCM"
+}
